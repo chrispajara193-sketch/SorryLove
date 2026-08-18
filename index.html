@@ -45,6 +45,7 @@
       text-align: center;
       position: relative;
       animation: slideUp 0.6s ease-out;
+      z-index: 10;
     }
 
     .emoji-header {
@@ -113,6 +114,8 @@
       cursor: pointer;
       border: none;
       transition: all 0.25s ease;
+      user-select: none;
+      z-index: 20;
     }
 
     .btn-forgive {
@@ -135,7 +138,6 @@
       background: #e5e7eb;
     }
 
-    /* Success Modal View */
     .hidden {
       display: none !important;
     }
@@ -149,7 +151,6 @@
       margin: 1rem 0;
     }
 
-    /* Floating Hearts Background Animation */
     .floating-heart {
       position: absolute;
       color: rgba(236, 72, 153, 0.4);
@@ -181,6 +182,7 @@
 </head>
 <body>
 
+  <!-- Main Card -->
   <main class="container" id="main-card">
     <div class="emoji-header">🥺❤️</div>
     <h1 id="gf-name">I'm So Sorry, Love</h1>
@@ -199,12 +201,12 @@
     </div>
 
     <div class="buttons">
-      <button class="btn btn-forgive" onclick="handleForgive()">I Forgive You 💕</button>
-      <button class="btn btn-treat" onclick="handleTreat()">Ice Cream! 🍦</button>
+      <button class="btn btn-forgive" id="btn-forgive" type="button">I Forgive You 💕</button>
+      <button class="btn btn-treat" id="btn-treat" type="button">Ice Cream! 🍦</button>
     </div>
   </main>
 
-  <!-- Happy view shown after clicking a button -->
+  <!-- Success Card -->
   <main class="container hidden" id="success-view">
     <div class="emoji-header">🥰💖</div>
     <h2 id="response-title">Thank you, Love.</h2>
@@ -213,47 +215,64 @@
 
   <script>
     function sendNotification(content) {
-      fetch("/api/notify", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ content: content })
-      }).catch(err => console.error("Error sending notification:", err));
-    }
-
-    // Sends an alert when page opens
-    window.addEventListener("load", () => {
-      sendNotification("👀 **Someone just opened your apology link!**");
-    });
-
-    function handleForgive() {
-      document.getElementById('main-card').classList.add('hidden');
-      document.getElementById('response-title').innerText = "Thank you, Love. 🥰💖";
-      document.getElementById('response-text').innerText = "I love you more than anything. I'm on my way with hugs!";
-      document.getElementById('success-view').classList.remove('hidden');
-      triggerHeartShower();
-      sendNotification("💖 **Response:** She clicked *'I Forgive You 💕'*!");
-    }
-
-    function handleTreat() {
-      document.getElementById('main-card').classList.add('hidden');
-      document.getElementById('response-title').innerText = "Deal! 🍦";
-      document.getElementById('response-text').innerText = "Yung tig 25 lang na ice cream ah, 'wag muna yung hershey hehe I love you!";
-      document.getElementById('success-view').classList.remove('hidden');
-      triggerHeartShower();
-      sendNotification("🍦 **Response:** She clicked *'Ice Cream! 🍦'* (Tig-25 deal!)");
+      try {
+        fetch("/api/notify", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ content: content })
+        }).catch(function(err) { console.log("Notif error:", err); });
+      } catch (e) {
+        console.log("Fetch error:", e);
+      }
     }
 
     function triggerHeartShower() {
-      for(let i = 0; i < 20; i++) {
+      const emojis = ['💖', '🌸', '✨', '💕'];
+      for (let i = 0; i < 20; i++) {
         const heart = document.createElement('div');
         heart.classList.add('floating-heart');
-        heart.innerText = ['💖', '🌸', '✨', '💕'][Math.floor(Math.random() * 4)];
+        heart.innerText = emojis[Math.floor(Math.random() * emojis.length)];
         heart.style.left = Math.random() * 100 + 'vw';
         heart.style.animationDuration = (Math.random() * 2 + 2) + 's';
         document.body.appendChild(heart);
-        setTimeout(() => heart.remove(), 4000);
+        setTimeout(function() { heart.remove(); }, 4000);
       }
     }
+
+    // Attach click events after HTML loads
+    document.addEventListener("DOMContentLoaded", function() {
+      // Send open notification
+      sendNotification("👀 **Someone just opened your apology link!**");
+
+      const forgiveBtn = document.getElementById("btn-forgive");
+      const treatBtn = document.getElementById("btn-treat");
+      const mainCard = document.getElementById("main-card");
+      const successView = document.getElementById("success-view");
+      const responseTitle = document.getElementById("response-title");
+      const responseText = document.getElementById("response-text");
+
+      if (forgiveBtn) {
+        forgiveBtn.addEventListener("click", function() {
+          mainCard.classList.add("hidden");
+          responseTitle.innerText = "Thank you, Love. 🥰💖";
+          responseText.innerText = "I love you more than anything. I'm on my way with hugs!";
+          successView.classList.remove("hidden");
+          triggerHeartShower();
+          sendNotification("💖 **Response:** She clicked *'I Forgive You 💕'*!");
+        });
+      }
+
+      if (treatBtn) {
+        treatBtn.addEventListener("click", function() {
+          mainCard.classList.add("hidden");
+          responseTitle.innerText = "Deal! 🍦";
+          responseText.innerText = "Yung tig 25 lang na ice cream ah, 'wag muna yung hershey hehe I love you!";
+          successView.classList.remove("hidden");
+          triggerHeartShower();
+          sendNotification("🍦 **Response:** She clicked *'Ice Cream! 🍦'* (Tig-25 deal!)");
+        });
+      }
+    });
   </script>
 </body>
 </html>
