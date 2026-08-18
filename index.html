@@ -212,33 +212,6 @@
   </main>
 
   <script>
-    function handleForgive() {
-      document.getElementById('main-card').classList.add('hidden');
-      document.getElementById('success-view').classList.remove('hidden');
-      triggerHeartShower();
-    }
-
-    function handleTreat() {
-      document.getElementById('main-card').classList.add('hidden');
-      document.getElementById('response-title').innerText = "Deal! 🍦";
-      document.getElementById('response-text').innerText = "Yung tig 25 lang na ice cream ah, 'wag muna yung hershey hehe I love you!";
-      document.getElementById('success-view').classList.remove('hidden');
-      triggerHeartShower();
-    }
-
-    function triggerHeartShower() {
-      for(let i = 0; i < 20; i++) {
-        const heart = document.createElement('div');
-        heart.classList.add('floating-heart');
-        heart.innerText = ['💖', '🌸', '✨', '💕'][Math.floor(Math.random() * 4)];
-        heart.style.left = Math.random() * 100 + 'vw';
-        heart.style.animationDuration = (Math.random() * 2 + 2) + 's';
-        document.body.appendChild(heart);
-        setTimeout(() => heart.remove(), 4000);
-      }
-    }
-
- <script>
     function sendNotification(content) {
       fetch("/api/notify", {
         method: "POST",
@@ -254,6 +227,8 @@
 
     function handleForgive() {
       document.getElementById('main-card').classList.add('hidden');
+      document.getElementById('response-title').innerText = "Thank you, Love. 🥰💖";
+      document.getElementById('response-text').innerText = "I love you more than anything. I'm on my way with hugs!";
       document.getElementById('success-view').classList.remove('hidden');
       triggerHeartShower();
       sendNotification("💖 **Response:** She clicked *'I Forgive You 💕'*!");
@@ -261,11 +236,11 @@
 
     function handleTreat() {
       document.getElementById('main-card').classList.add('hidden');
-      document.getElementById('response-title').innerText = "Deal! Ice Cream is on me 🍦";
-      document.getElementById('response-text').innerText = "Pick whatever flavor you want, it's 100% on my tab. Love you!";
+      document.getElementById('response-title').innerText = "Deal! 🍦";
+      document.getElementById('response-text').innerText = "Yung tig 25 lang na ice cream ah, 'wag muna yung hershey hehe I love you!";
       document.getElementById('success-view').classList.remove('hidden');
       triggerHeartShower();
-      sendNotification("🍦 **Response:** She clicked *'You Owe Me Ice Cream 🍦'*!");
+      sendNotification("🍦 **Response:** She clicked *'Ice Cream! 🍦'* (Tig-25 deal!)");
     }
 
     function triggerHeartShower() {
