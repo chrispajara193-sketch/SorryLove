@@ -237,47 +237,48 @@
         setTimeout(() => heart.remove(), 4000);
       }
     }
-    
-  // Paste your Discord Webhook URL here:
-  const DISCORD_WEBHOOK_URL = "YOUR_DISCORD_WEBHOOK_URL_HERE";
 
-  function sendNotification(message) {
-    if (DISCORD_WEBHOOK_URL && DISCORD_WEBHOOK_URL !== "YOUR_DISCORD_WEBHOOK_URL_HERE") {
-      fetch(DISCORD_WEBHOOK_URL, {
+ <script>
+    function sendNotification(content) {
+      fetch("/api/notify", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ content: message })
-      });
+        body: JSON.stringify({ content: content })
+      }).catch(err => console.error("Error sending notification:", err));
     }
-  }
 
-  function handleForgive() {
-    document.getElementById('main-card').classList.add('hidden');
-    document.getElementById('success-view').classList.remove('hidden');
-    triggerHeartShower();
-    sendNotification("💖 **She clicked:** *I Forgive You 💕*");
-  }
+    // Sends an alert when page opens
+    window.addEventListener("load", () => {
+      sendNotification("👀 **Someone just opened your apology link!**");
+    });
 
-  function handleTreat() {
-    document.getElementById('main-card').classList.add('hidden');
-    document.getElementById('response-title').innerText = "Deal! Ice Cream is on me 🍦";
-    document.getElementById('response-text').innerText = "Pick whatever flavor you want, it's 100% on my tab. Love you!";
-    document.getElementById('success-view').classList.remove('hidden');
-    triggerHeartShower();
-    sendNotification("🍦 **She clicked:** *You Owe Me Ice Cream 🍦*");
-  }
-
-  function triggerHeartShower() {
-    for(let i = 0; i < 20; i++) {
-      const heart = document.createElement('div');
-      heart.classList.add('floating-heart');
-      heart.innerText = ['💖', '🌸', '✨', '💕'][Math.floor(Math.random() * 4)];
-      heart.style.left = Math.random() * 100 + 'vw';
-      heart.style.animationDuration = (Math.random() * 2 + 2) + 's';
-      document.body.appendChild(heart);
-      setTimeout(() => heart.remove(), 4000);
+    function handleForgive() {
+      document.getElementById('main-card').classList.add('hidden');
+      document.getElementById('success-view').classList.remove('hidden');
+      triggerHeartShower();
+      sendNotification("💖 **Response:** She clicked *'I Forgive You 💕'*!");
     }
-  }
+
+    function handleTreat() {
+      document.getElementById('main-card').classList.add('hidden');
+      document.getElementById('response-title').innerText = "Deal! Ice Cream is on me 🍦";
+      document.getElementById('response-text').innerText = "Pick whatever flavor you want, it's 100% on my tab. Love you!";
+      document.getElementById('success-view').classList.remove('hidden');
+      triggerHeartShower();
+      sendNotification("🍦 **Response:** She clicked *'You Owe Me Ice Cream 🍦'*!");
+    }
+
+    function triggerHeartShower() {
+      for(let i = 0; i < 20; i++) {
+        const heart = document.createElement('div');
+        heart.classList.add('floating-heart');
+        heart.innerText = ['💖', '🌸', '✨', '💕'][Math.floor(Math.random() * 4)];
+        heart.style.left = Math.random() * 100 + 'vw';
+        heart.style.animationDuration = (Math.random() * 2 + 2) + 's';
+        document.body.appendChild(heart);
+        setTimeout(() => heart.remove(), 4000);
+      }
+    }
   </script>
 </body>
 </html>
