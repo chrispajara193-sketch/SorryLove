@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>I'm Really Sorry ❤️</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <main class="container" id="main-card">
+    <div class="emoji-header">🥺❤️</div>
+    <h1 id="gf-name">I'm So Sorry, Love</h1>
+    
+    <p class="message" id="gf-message">
+      I hate knowing that I hurt you or made things harder for you. You mean the absolute world to me, and I want to make things right.
+    </p>
+
+    <div class="promises-card">
+      <h3>My Promises To You:</h3>
+      <ul id="promise-list">
+        <li>✨ I'm listening and I understand why you're upset.</li>
+        <li>🍫 I'll make it up to you with treats and affection.</li>
+        <li>🫂 I'll do better so this doesn't happen again.</li>
+      </ul>
+    </div>
+
+    <div class="buttons">
+      <button class="btn btn-forgive" onclick="handleForgive()">I Forgive You 💕</button>
+      <button class="btn btn-treat" onclick="handleTreat()">You Owe Me Ice Cream 🍦</button>
+    </div>
+  </main>
+
+  <!-- Happy view shown after clicking a button -->
+  <main class="container hidden" id="success-view">
+    <div class="emoji-header">🥰💖</div>
+    <h2 id="response-title">Thank you for being so wonderful.</h2>
+    <p class="message" id="response-text">I love you more than anything. I'm on my way with hugs and your favorite snacks!</p>
+  </main>
+
+  <script>
+    // Fetch personalized data from the backend
+    fetch('/api/apology')
+      .then(res => res.json())
+      .then(data => {
+        if(data.name) document.getElementById('gf-name').innerText = `I'm So Sorry, ${data.name}`;
+        if(data.message) document.getElementById('gf-message').innerText = data.message;
+      });
+
+    function handleForgive() {
+      document.getElementById('main-card').classList.add('hidden');
+      document.getElementById('success-view').classList.remove('hidden');
+      triggerHeartShower();
+    }
+
+    function handleTreat() {
+      document.getElementById('main-card').classList.add('hidden');
+      document.getElementById('response-title').innerText = "Deal! Ice Cream is on me 🍦";
+      document.getElementById('response-text').innerText = "Pick whatever flavor you want, it's 100% on my tab. Love you!";
+      document.getElementById('success-view').classList.remove('hidden');
+      triggerHeartShower();
+    }
+
+    function triggerHeartShower() {
+      for(let i = 0; i < 20; i++) {
+        const heart = document.createElement('div');
+        heart.classList.add('floating-heart');
+        heart.innerText = ['💖', '🌸', '✨', '💕'][Math.floor(Math.random() * 4)];
+        heart.style.left = Math.random() * 100 + 'vw';
+        heart.style.animationDuration = (Math.random() * 2 + 2) + 's';
+        document.body.appendChild(heart);
+        setTimeout(() => heart.remove(), 4000);
+      }
+    }
+  </script>
+</body>
+</html>
